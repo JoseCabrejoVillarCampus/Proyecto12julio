@@ -91,7 +91,7 @@ ALTER TABLE usuario
 
 
 
-
+SELECT * FROM especialidad;
 
 
 
