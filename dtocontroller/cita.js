@@ -9,11 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Expose, Type, Transform } from 'class-transformer';
 export class citaDTO {
-    constructor(ID, fecha, medico, espec, datausu) {
+    constructor(ID, fecha, estado, medico, datausu) {
         this.cit_codigo = ID;
         this.cit_fecha = fecha;
-        this.cit_estadoCita = medico;
-        this.cit_medico = espec;
+        this.cit_estadoCita = estado;
+        this.cit_medico = medico;
         this.cit_datosUsuario = datausu;
     }
     get nombreId() {

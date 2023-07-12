@@ -11,9 +11,9 @@ storageGenero.use((req, res, next) => {
     next();
 })
 
-storageGenero.get("/:?", proxyGenero , (req,res)=>{
+storageGenero.get("/:id?", proxyGenero , (req,res)=>{
     let sql = (req.params.id)
-        ? [`SELECT * FROM genero WHERE ?`, req.params]
+        ? [`SELECT * FROM genero WHERE gen_id = ?`, req.params.id]
         : [`SELECT * FROM genero`];
     con.query(...sql,
         (err, data, fie)=>{
@@ -42,7 +42,7 @@ storageGenero.post("/", proxyGenero ,(req, res) => {
 storageGenero.put("/:id", proxyGenero ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE genero SET ?  WHERE id = ?`,
+        `UPDATE genero SET ?  WHERE gen_id = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ storageGenero.put("/:id", proxyGenero ,(req, res) => {
 storageGenero.delete("/:id", proxyGenero ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM genero WHERE id = ?`,
+        `DELETE FROM genero WHERE gen_id = ?`,
         [id],
         (err, result) => {
             if (err) {

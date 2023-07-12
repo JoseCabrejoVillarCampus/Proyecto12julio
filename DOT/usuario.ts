@@ -34,6 +34,10 @@ export class usuarioDTO {
     @Type(() => String)
     usu_email: string;
 
+    @Expose({ name: 'usu_edad' })
+    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    usu_edad: number;
+
     @Expose({ name: 'usu_tipodoc' })
     @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
     usu_tipodoc: number;
@@ -56,6 +60,7 @@ export class usuarioDTO {
         telefono: string,
         direccion: string,
         email: string,
+        edad: number,
         documento: number,
         genero: number,
         acudiente: number,
@@ -69,6 +74,7 @@ export class usuarioDTO {
         this.usu_telefono = telefono;
         this.usu_direccion = direccion;
         this.usu_email = email;
+        this.usu_edad = edad;
         this.usu_tipodoc = documento;
         this.usu_genero = genero;
         this.usu_acudiente = acudiente;

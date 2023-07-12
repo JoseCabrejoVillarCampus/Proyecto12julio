@@ -13,7 +13,7 @@ storageEspecialidad.use((req, res, next) => {
 
 storageEspecialidad.get("/:id?", proxyEspecialidad , (req,res)=>{
     let sql = (req.params.id)
-        ? [`SELECT * FROM especialidad WHERE ?`, req.params]
+        ? [`SELECT * FROM especialidad WHERE esp_id = ?`, req.params.id]
         : [`SELECT * FROM especialidad`];
     con.query(...sql,
         (err, data, fie)=>{
@@ -42,7 +42,7 @@ storageEspecialidad.post("/", proxyEspecialidad ,(req, res) => {
 storageEspecialidad.put("/:id", proxyEspecialidad ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE especialidad SET ?  WHERE id = ?`,
+        `UPDATE especialidad SET ?  WHERE esp_id = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ storageEspecialidad.put("/:id", proxyEspecialidad ,(req, res) => {
 storageEspecialidad.delete("/:id", proxyEspecialidad ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM especialidad WHERE id = ?`,
+        `DELETE FROM especialidad WHERE esp_id = ?`,
         [id],
         (err, result) => {
             if (err) {

@@ -26,15 +26,15 @@ export class citaDTO {
     constructor(
         ID: number,
         fecha: Date,
+        estado: number,
         medico: number,
-        espec: number,
         datausu: number,
 
     ) {
         this.cit_codigo = ID;
         this.cit_fecha = fecha;
-        this.cit_estadoCita = medico;
-        this.cit_medico = espec;
+        this.cit_estadoCita = estado;
+        this.cit_medico = medico;
         this.cit_datosUsuario = datausu;
     }
 

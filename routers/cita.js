@@ -11,16 +11,30 @@ storageCita.use((req, res, next) => {
     next();
 })
 
-storageCita.get("/:id?", proxyCita , (req,res)=>{
-    let sql = (req.params.id)
-        ? [`SELECT * FROM cita WHERE ?`, req.params]
-        : [`SELECT * FROM cita`];
-    con.query(...sql,
-        (err, data, fie)=>{
-            res.send(data);
-        }
-    );
-})
+storageCita.get("/:id?", proxyCita, (req, res) => {
+    if (req.params.id === "order") {
+        con.query(
+            `SELECT * FROM cita ORDER BY cit_fecha ASC`,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
+    } else {
+        let sql = (req.params.id) ?
+            [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
+            [`SELECT * FROM cita`];
+        con.query(...sql,
+            (err, data, fie) => {
+                res.send(data);
+            }
+        );
+    }
+});
 
 storageCita.post("/", proxyCita ,(req, res) => {
     con.query(
@@ -42,7 +56,7 @@ storageCita.post("/", proxyCita ,(req, res) => {
 storageCita.put("/:id", proxyCita ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE cita SET ?  WHERE id = ?`,
+        `UPDATE cita SET ?  WHERE cit_codigo = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +71,7 @@ storageCita.put("/:id", proxyCita ,(req, res) => {
 storageCita.delete("/:id", proxyCita ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM cita WHERE id = ?`,
+        `DELETE FROM cita WHERE cit_codigo = ?`,
         [id],
         (err, result) => {
             if (err) {

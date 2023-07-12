@@ -1,5 +1,7 @@
 import mysql from 'mysql2';
-import {Router} from 'express';
+import {
+    Router
+} from 'express';
 import proxyUsuario from '../middleware/middlewareusuarios.js';
 const storageUsuario = Router();
 let con = undefined;
@@ -11,18 +13,32 @@ storageUsuario.use((req, res, next) => {
     next();
 })
 
-storageUsuario.get("/:id?", proxyUsuario , (req,res)=>{
-    let sql = (req.params.id)
-        ? [`SELECT * FROM cita WHERE ?`, req.params]
-        : [`SELECT * FROM cita`];
-    con.query(...sql,
-        (err, data, fie)=>{
-            res.send(data);
-        }
-    );
-})
+storageUsuario.get("/:id?", proxyUsuario, (req, res) => {
+    if (req.params.id === "order") {
+        con.query(
+            `SELECT * FROM usuario ORDER BY usu_nombre`,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener los usuarios:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
+    } else {
+        let sql = (req.params.id) ?
+    [`SELECT * FROM usuario WHERE usu_id = ?`, req.params.id] :
+    [`SELECT * FROM usuario`];
+        con.query(...sql,
+            (err, data, fie) => {
+                res.send(data);
+            }
+        );
+    }
+});
 
-storageUsuario.post("/", proxyUsuario ,(req, res) => {
+storageUsuario.post("/", proxyUsuario, (req, res) => {
     con.query(
         /*sql*/
         `INSERT INTO usuario SET ?`,
@@ -39,10 +55,10 @@ storageUsuario.post("/", proxyUsuario ,(req, res) => {
 });
 
 
-storageUsuario.put("/:id", proxyUsuario ,(req, res) => {
+storageUsuario.put("/:id", proxyUsuario, (req, res) => {
     con.query(
         /*sql*/
-        `UPDATE usuario SET ?  WHERE id = ?`,
+        `UPDATE usuario SET ? WHERE usu_id = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -54,11 +70,12 @@ storageUsuario.put("/:id", proxyUsuario ,(req, res) => {
         }
     );
 });
-storageUsuario.delete("/:id", proxyUsuario ,(req, res) => {
+
+storageUsuario.delete("/:id", proxyUsuario, (req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM usuario WHERE id = ?`,
-        [id],
+        `DELETE FROM usuario WHERE usu_id = ?`,
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar usuario:', err.message);

@@ -11,16 +11,35 @@ storageMedico.use((req, res, next) => {
     next();
 })
 
-storageMedico.get("/:?", proxyMedico , (req,res)=>{
-    let sql = (req.params.id)
-        ? [`SELECT * FROM medico WHERE ?`, req.params]
-        : [`SELECT * FROM medico`];
-    con.query(...sql,
-        (err, data, fie)=>{
-            res.send(data);
-        }
-    );
-})
+storageMedico.get("/:id?", proxyMedico, (req, res) => {
+    if (req.params.id === "order") {
+        con.query(
+            `SELECT medico.med_nombreCompleto AS "medicos",
+            medico.med_especialidad AS "fk_especialidad" ,
+            especialidad.esp_nombre AS "especialidad_medico"
+            FROM medico 
+            INNER JOIN especialidad ON medico.med_especialidad = especialidad.esp_id
+            WHERE especialidad.esp_nombre = "req.param"`,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener los medicos:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
+    } else {
+        let sql = (req.params.id) ?
+    [`SELECT * FROM medico WHERE med_nroMatriculaProsional = ?`, req.params.id] :
+    [`SELECT * FROM medico`];
+        con.query(...sql,
+            (err, data, fie) => {
+                res.send(data);
+            }
+        );
+    }
+});
 
 storageMedico.post("/", proxyMedico ,(req, res) => {
     con.query(
@@ -42,7 +61,7 @@ storageMedico.post("/", proxyMedico ,(req, res) => {
 storageMedico.put("/:id", proxyMedico ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE medico SET ?  WHERE id = ?`,
+        `UPDATE medico SET ?  WHERE med_nroMatriculaProsional = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +76,7 @@ storageMedico.put("/:id", proxyMedico ,(req, res) => {
 storageMedico.delete("/:id", proxyMedico ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM medico WHERE id = ?`,
+        `DELETE FROM medico WHERE med_nroMatriculaProsional = ?`,
         [id],
         (err, result) => {
             if (err) {

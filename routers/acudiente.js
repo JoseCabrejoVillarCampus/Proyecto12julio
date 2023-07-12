@@ -13,7 +13,7 @@ storageAcudiente.use((req, res, next) => {
 
 storageAcudiente.get("/:id?", proxyAcudiente , (req,res)=>{
     let sql = (req.params.id)
-        ? [`SELECT * FROM acudiente WHERE ?`, req.params]
+        ? [`SELECT * FROM acudiente WHERE acu_codigo = ?`, req.params.id]
         : [`SELECT * FROM acudiente`];
     con.query(...sql,
         (err, data, fie)=>{
@@ -42,7 +42,7 @@ storageAcudiente.post("/", proxyAcudiente ,(req, res) => {
 storageAcudiente.put("/:id", proxyAcudiente ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE acudiente SET ?  WHERE id = ?`,
+        `UPDATE acudiente SET ?  WHERE acu_codigo = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ storageAcudiente.put("/:id", proxyAcudiente ,(req, res) => {
 storageAcudiente.delete("/:id", proxyAcudiente ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM acudiente WHERE id = ?`,
+        `DELETE FROM acudiente WHERE acu_codigo = ?`,
         [id],
         (err, result) => {
             if (err) {

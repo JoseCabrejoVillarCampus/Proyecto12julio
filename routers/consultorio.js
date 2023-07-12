@@ -13,7 +13,7 @@ storageConsultorio.use((req, res, next) => {
 
 storageConsultorio.get("/:id?", proxyConsultorio , (req,res)=>{
     let sql = (req.params.id)
-        ? [`SELECT * FROM consultorio WHERE ?`, req.params]
+        ? [`SELECT * FROM consultorio WHERE cons_codigo = ?`, req.params.id]
         : [`SELECT * FROM consultorio`];
     con.query(...sql,
         (err, data, fie)=>{
@@ -42,7 +42,7 @@ storageConsultorio.post("/", proxyConsultorio ,(req, res) => {
 storageConsultorio.put("/:id", proxyConsultorio ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE consultorio SET ?  WHERE id = ?`,
+        `UPDATE consultorio SET ?  WHERE cons_codigo = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ storageConsultorio.put("/:id", proxyConsultorio ,(req, res) => {
 storageConsultorio.delete("/:id", proxyConsultorio ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM consultorio WHERE id = ?`,
+        `DELETE FROM consultorio WHERE cons_codigo = ?`,
         [id],
         (err, result) => {
             if (err) {

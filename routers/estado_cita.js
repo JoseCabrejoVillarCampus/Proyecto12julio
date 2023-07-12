@@ -13,7 +13,7 @@ storageEstadoCita.use((req, res, next) => {
 
 storageEstadoCita.get("/:id?", proxyEstadoCita , (req,res)=>{
     let sql = (req.params.id)
-        ? [`SELECT * FROM estado_cita WHERE ?`, req.params]
+        ? [`SELECT * FROM estado_cita WHERE estcita_id = ?`, req.params.id]
         : [`SELECT * FROM estado_cita`];
     con.query(...sql,
         (err, data, fie)=>{
@@ -42,7 +42,7 @@ storageEstadoCita.post("/", proxyEstadoCita ,(req, res) => {
 storageEstadoCita.put("/:id", proxyEstadoCita ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE estado_cita SET ?  WHERE id = ?`,
+        `UPDATE estado_cita SET ?  WHERE estcita_id = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ storageEstadoCita.put("/:id", proxyEstadoCita ,(req, res) => {
 storageEstadoCita.delete("/:id", proxyEstadoCita ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM estado_cita WHERE id = ?`,
+        `DELETE FROM estado_cita WHERE estcita_id = ?`,
         [id],
         (err, result) => {
             if (err) {

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Expose, Type, Transform } from 'class-transformer';
 export class usuarioDTO {
-    constructor(ID, nombre, secondnombre, primerapellido, segapellido, telefono, direccion, email, documento, genero, acudiente) {
+    constructor(ID, nombre, secondnombre, primerapellido, segapellido, telefono, direccion, email, edad, documento, genero, acudiente) {
         this.usu_id = ID;
         this.usu_nombre = nombre;
         this.usu_segdo_nombre = secondnombre;
@@ -18,6 +18,7 @@ export class usuarioDTO {
         this.usu_telefono = telefono;
         this.usu_direccion = direccion;
         this.usu_email = email;
+        this.usu_edad = edad;
         this.usu_tipodoc = documento;
         this.usu_genero = genero;
         this.usu_acudiente = acudiente;
@@ -66,6 +67,11 @@ __decorate([
     Type(() => String),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_email", void 0);
+__decorate([
+    Expose({ name: 'usu_edad' }),
+    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    __metadata("design:type", Number)
+], usuarioDTO.prototype, "usu_edad", void 0);
 __decorate([
     Expose({ name: 'usu_tipodoc' }),
     Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),

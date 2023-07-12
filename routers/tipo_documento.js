@@ -11,9 +11,9 @@ storageTipoDocumento.use((req, res, next) => {
     next();
 })
 
-storageTipoDocumento.get("/:?", proxyTipoDocumento , (req,res)=>{
+storageTipoDocumento.get("/:id?", proxyTipoDocumento , (req,res)=>{
     let sql = (req.params.id)
-        ? [`SELECT * FROM tipo_documento WHERE ?`, req.params]
+        ? [`SELECT * FROM tipo_documento WHERE tipdoc_id = ?`, req.params.id]
         : [`SELECT * FROM tipo_documento`];
     con.query(...sql,
         (err, data, fie)=>{
@@ -42,7 +42,7 @@ storageTipoDocumento.post("/", proxyTipoDocumento ,(req, res) => {
 storageTipoDocumento.put("/:id", proxyTipoDocumento ,(req, res) => {
     con.query(
         /*sql*/
-        `UPDATE tipo_documento SET ?  WHERE id = ?`,
+        `UPDATE tipo_documento SET ?  WHERE tipdoc_id = ?`,
         [req.body, req.params.id],
         (err, result) => {
             if (err) {
@@ -57,7 +57,7 @@ storageTipoDocumento.put("/:id", proxyTipoDocumento ,(req, res) => {
 storageTipoDocumento.delete("/:id", proxyTipoDocumento ,(req, res) => {
     con.query(
         /*sql*/
-        `DELETE FROM tipo_documento WHERE id = ?`,
+        `DELETE FROM tipo_documento WHERE tipdoc_id = ?`,
         [id],
         (err, result) => {
             if (err) {
