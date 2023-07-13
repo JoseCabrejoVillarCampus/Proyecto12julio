@@ -43,7 +43,22 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
-    } else {
+    } else if (req.params.id === "date") {
+        con.query(
+            `SELECT cita.*
+            FROM cita
+            WHERE cita.cit_fecha = '2023-07-12'
+            `,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
+    }else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
             [`SELECT * FROM cita`];
