@@ -1,4 +1,5 @@
 import { Expose, Type, Transform } from 'class-transformer';
+import {isInt} from 'class-validator';
 
 export class usuarioDTO {
 

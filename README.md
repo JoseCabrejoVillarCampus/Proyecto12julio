@@ -174,4 +174,7 @@ Obtener todas las citas realizadas por los pacientes de un genero si su estado d
 ```
 Endpoint: http://127.9.63.21:5014/cita/generoatendido/genero(1 masculino, 2 femenino)
 ```
-
+Mostrar todas las citas que fueron rechazadas y en un mes específico, mostrar la fecha de la cita, el nombre del usuario y el médico.
+```
+http://127.9.63.21:5014/cita/rechazadas/"fecha"
+```

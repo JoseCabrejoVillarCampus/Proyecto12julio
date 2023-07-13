@@ -204,3 +204,12 @@ WHERE u.usu_genero = 2
 AND ec.estcita_nombre = "Confirmada"; 
 
 SELECT
+cita.cit_codigo,
+cita.cit_fecha,
+usuario.usu_id,
+usuario.usu_nombre,
+medico.med_nombreCompleto
+FROM cita
+INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
+INNER JOIN medico ON cita.cit_medico = medico.med_nroMatriculaProsional
+WHERE cit_estadoCita = 2 AND MONTH(cit_fecha) = MONTH (?);

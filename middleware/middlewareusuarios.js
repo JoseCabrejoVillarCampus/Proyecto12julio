@@ -2,6 +2,7 @@ import express  from "express";
 import 'reflect-metadata';
 import { plainToClass } from "class-transformer";
 import {usuarioDTO} from "../dtocontroller/usuario.js"
+import { Validate } from "class-validator";
 
 const proxyUsuario = express();
 proxyUsuario.use((req,res,next)=>{

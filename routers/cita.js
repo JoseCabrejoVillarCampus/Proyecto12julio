@@ -137,6 +137,29 @@ storageCita.get("/:id?/:data?", proxyCita, (req, res) => {
                 }
             }
         ) 
+    }else if (req.params.id === "rechazadas") {
+        con.query(
+            `SELECT
+            cita.cit_codigo,
+            cita.cit_fecha,
+            usuario.usu_id,
+            usuario.usu_nombre,
+            medico.med_nombreCompleto
+            FROM cita
+            INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
+            INNER JOIN medico ON cita.cit_medico = medico.med_nroMatriculaProsional
+            WHERE cit_estadoCita = 2 AND MONTH(cit_fecha) = MONTH(?)
+            `,
+            [req.params.data],
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        ) 
     }else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
@@ -165,7 +188,6 @@ storageCita.post("/", proxyCita ,(req, res) => {
     );
 });
 
-
 storageCita.put("/:id", proxyCita ,(req, res) => {
     con.query(
         /*sql*/
@@ -181,6 +203,7 @@ storageCita.put("/:id", proxyCita ,(req, res) => {
         }
     );
 });
+
 storageCita.delete("/:id", proxyCita ,(req, res) => {
     con.query(
         /*sql*/
