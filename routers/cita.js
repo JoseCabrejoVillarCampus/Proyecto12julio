@@ -24,6 +24,25 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
+    } else if (req.params.id === "prox") {
+        con.query(
+            `SELECT cita.*
+            FROM cita
+            INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
+            WHERE usuario.usu_id = 1
+                AND cita.cit_fecha >= CURDATE()
+            ORDER BY cita.cit_fecha ASC
+            LIMIT 1
+            `,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
     } else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :

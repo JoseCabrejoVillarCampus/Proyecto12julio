@@ -12,14 +12,15 @@ storageMedico.use((req, res, next) => {
 })
 
 storageMedico.get("/:id?", proxyMedico, (req, res) => {
-    if (req.params.id === "order") {
+    if (req.params.id === "especialidad") {
         con.query(
             `SELECT medico.med_nombreCompleto AS "medicos",
             medico.med_especialidad AS "fk_especialidad" ,
             especialidad.esp_nombre AS "especialidad_medico"
             FROM medico 
             INNER JOIN especialidad ON medico.med_especialidad = especialidad.esp_id
-            WHERE especialidad.esp_nombre = "req.param"`,
+            WHERE especialidad.esp_nombre = ?`,
+            [req.params.id],
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener los medicos:', err.message);
@@ -31,8 +32,8 @@ storageMedico.get("/:id?", proxyMedico, (req, res) => {
         );
     } else {
         let sql = (req.params.id) ?
-    [`SELECT * FROM medico WHERE med_nroMatriculaProsional = ?`, req.params.id] :
-    [`SELECT * FROM medico`];
+            [`SELECT * FROM medico WHERE med_nroMatriculaProsional = ?`, req.params.id] :
+            [`SELECT * FROM medico`];
         con.query(...sql,
             (err, data, fie) => {
                 res.send(data);
@@ -40,6 +41,8 @@ storageMedico.get("/:id?", proxyMedico, (req, res) => {
         );
     }
 });
+
+
 
 storageMedico.post("/", proxyMedico ,(req, res) => {
     con.query(

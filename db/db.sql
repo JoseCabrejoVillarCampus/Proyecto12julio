@@ -156,4 +156,47 @@ medico.med_especialidad AS "fk_especialidad" ,
 especialidad.esp_nombre AS "especialidad_medico"
 FROM medico 
 INNER JOIN especialidad ON medico.med_especialidad = especialidad.esp_id
-WHERE especialidad.esp_nombre = "req.param";
+WHERE especialidad.esp_nombre = "Cardiología";
+
+SELECT cita.*
+FROM cita
+INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
+WHERE usuario.usu_id = 1
+    AND cita.cit_fecha >= CURDATE()
+ORDER BY cita.cit_fecha ASC
+LIMIT 1;
+
+SELECT usuario.*
+FROM usuario
+INNER JOIN cita ON usuario.usu_id = cita.cit_datosUsuario
+WHERE cita.cit_medico = 123456;
+
+SELECT consultorio.*
+FROM consultorio
+INNER JOIN medico ON consultorio.cons_codigo = medico.med_consultorio
+INNER JOIN cita ON medico.med_nroMatriculaProsional = cita.cit_medico
+WHERE cita.cit_datosUsuario = 1;
+
+SELECT cita.*
+FROM cita
+WHERE cita.cit_fecha = '2023-07-12';
+
+SELECT medico.med_nroMatriculaProsional, medico.med_nombreCompleto, consultorio.cons_nombre
+FROM medico
+INNER JOIN consultorio ON medico.med_consultorio = consultorio.cons_codigo;
+
+SELECT COUNT(*) AS total_citas
+FROM cita
+WHERE cit_medico = 123456
+AND cit_fecha = '2023-07-12';
+SELECT DISTINCT c.cons_nombre
+FROM cita ci
+JOIN medico m ON ci.cit_medico = m.med_nroMatriculaProsional
+JOIN consultorio c ON m.med_consultorio = c.cons_codigo
+WHERE ci.cit_datosUsuario = 1;
+SELECT ci.cit_codigo, u.usu_nombre, u.usu_genero, ec.estcita_nombre
+FROM cita ci
+JOIN usuario u ON ci.cit_datosUsuario = u.usu_id
+JOIN estado_cita ec ON ci.cit_estadoCita = ec.estcita_id
+WHERE u.usu_genero = 'Masculino' -- Reemplaza 'Masculino' por el género deseado
+AND ec.estcita_nombre = 'Atendida'; -- Reemplaza 'Atendida' por el estado de la cita deseado
