@@ -58,6 +58,22 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
+    } else if (req.params.id === "numdate") {
+        con.query(
+            `SELECT COUNT(*) AS total_citas
+            FROM cita
+            WHERE cit_medico = 123456
+            AND cit_fecha = '2023-07-12'
+            `,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
     }else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
