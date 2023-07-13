@@ -74,6 +74,23 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
+    } else if (req.params.id === "consultoriopaciente") {
+        con.query(
+            `SELECT DISTINCT c.cons_nombre
+            FROM cita ci
+            JOIN medico m ON ci.cit_medico = m.med_nroMatriculaProsional
+            JOIN consultorio c ON m.med_consultorio = c.cons_codigo
+            WHERE ci.cit_datosUsuario = 1
+            `,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
     }else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
