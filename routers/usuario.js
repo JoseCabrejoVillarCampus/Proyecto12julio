@@ -26,6 +26,21 @@ storageUsuario.get("/:id?", proxyUsuario, (req, res) => {
                 }
             }
         );
+    }else if (req.params.id === "medico") {
+        con.query(
+            `SELECT usuario.*
+            FROM usuario
+            INNER JOIN cita ON usuario.usu_id = cita.cit_datosUsuario
+            WHERE cita.cit_medico = 123456`,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener los usuarios:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
     } else {
         let sql = (req.params.id) ?
     [`SELECT * FROM usuario WHERE usu_id = ?`, req.params.id] :
