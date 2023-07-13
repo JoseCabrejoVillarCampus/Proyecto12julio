@@ -11,16 +11,35 @@ storageConsultorio.use((req, res, next) => {
     next();
 })
 
-storageConsultorio.get("/:id?", proxyConsultorio , (req,res)=>{
-    let sql = (req.params.id)
-        ? [`SELECT * FROM consultorio WHERE cons_codigo = ?`, req.params.id]
-        : [`SELECT * FROM consultorio`];
-    con.query(...sql,
-        (err, data, fie)=>{
-            res.send(data);
-        }
-    );
-})
+storageConsultorio.get("/:id?", proxyConsultorio, (req, res) => {
+    if (req.params.id === "paciente") {
+        con.query(
+            `SELECT consultorio.*
+            FROM consultorio
+            INNER JOIN medico ON consultorio.cons_codigo = medico.med_consultorio
+            INNER JOIN cita ON medico.med_nroMatriculaProsional = cita.cit_medico
+            WHERE cita.cit_datosUsuario = 1`,
+            [req.params.id],
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener los medicos:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
+    } else {
+        let sql = (req.params.id) ?
+            [`SELECT * FROM consultorio WHERE cons_codigo = ?`, req.params.id] :
+            [`SELECT * FROM consultorio`];
+        con.query(...sql,
+            (err, data, fie) => {
+                res.send(data);
+            }
+        );
+    }
+});
 
 storageConsultorio.post("/", proxyConsultorio ,(req, res) => {
     con.query(
