@@ -42,9 +42,9 @@ storageUsuario.get("/:id?", proxyUsuario, (req, res) => {
             }
         );
     } else {
-        let sql = (req.params.id) ?
-    [`SELECT * FROM usuario WHERE usu_id = ?`, req.params.id] :
-    [`SELECT * FROM usuario`];
+        let sql = (req.params.id) 
+        ?[`SELECT * FROM usuario WHERE usu_id = ?`, req.params.id] 
+        :[`SELECT * FROM usuario`];
         con.query(...sql,
             (err, data, fie) => {
                 res.send(data);

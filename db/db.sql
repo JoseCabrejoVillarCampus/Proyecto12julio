@@ -165,10 +165,12 @@ WHERE usuario.usu_id = 1
     AND cita.cit_fecha >= CURDATE()
 ORDER BY cita.cit_fecha ASC
 LIMIT 1;
-
-SELECT usuario.*
-FROM usuario
-INNER JOIN cita ON usuario.usu_id = cita.cit_datosUsuario
+SELECT cita.* ,
+usuario.usu_nombre nombre_usuario,
+medico.med_nombreCompleto nombre_medico
+FROM cita
+INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
+INNER JOIN medico ON cita.cit_medico = medico.med_nroMatriculaProsional
 WHERE cita.cit_medico = 123456;
 
 SELECT consultorio.*
@@ -198,5 +200,7 @@ SELECT ci.cit_codigo, u.usu_nombre, u.usu_genero, ec.estcita_nombre
 FROM cita ci
 JOIN usuario u ON ci.cit_datosUsuario = u.usu_id
 JOIN estado_cita ec ON ci.cit_estadoCita = ec.estcita_id
-WHERE u.usu_genero = "Masculino"
+WHERE u.usu_genero = 2
 AND ec.estcita_nombre = "Confirmada"; 
+
+SELECT

@@ -11,15 +11,15 @@ storageConsultorio.use((req, res, next) => {
     next();
 })
 
-storageConsultorio.get("/:id?", proxyConsultorio, (req, res) => {
+storageConsultorio.get("/:id?/:data?", proxyConsultorio, (req, res) => {
     if (req.params.id === "paciente") {
         con.query(
             `SELECT consultorio.*
             FROM consultorio
             INNER JOIN medico ON consultorio.cons_codigo = medico.med_consultorio
             INNER JOIN cita ON medico.med_nroMatriculaProsional = cita.cit_medico
-            WHERE cita.cit_datosUsuario = 1`,
-            [req.params.id],
+            WHERE cita.cit_datosUsuario = ?`,
+            [req.params.data],
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener los medicos:', err.message);

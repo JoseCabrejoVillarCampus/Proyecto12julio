@@ -11,7 +11,7 @@ storageMedico.use((req, res, next) => {
     next();
 })
 
-storageMedico.get("/:id?", proxyMedico, (req, res) => {
+storageMedico.get("/:id?/:data?", proxyMedico, (req, res) => {
     if (req.params.id === "especialidad") {
         con.query(
             `SELECT medico.med_nombreCompleto AS "medicos",
@@ -20,7 +20,7 @@ storageMedico.get("/:id?", proxyMedico, (req, res) => {
             FROM medico 
             INNER JOIN especialidad ON medico.med_especialidad = especialidad.esp_id
             WHERE especialidad.esp_nombre = ?`,
-            [req.params.id],
+            [req.params.data],
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener los medicos:', err.message);

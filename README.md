@@ -124,7 +124,7 @@ Descripción: Este endpoint permite actualizar los datos existentes.
 Eliminar una ruta
 Método: DELETE
 ```
-Endpoint: http://127.9.63.21:5012/ruta/:pk
+Endpoint: http://127.9.63.21:5012/ruta/:pk /:parametro
 ```
 Descripción: Este endpoint permite eliminar un dato existente.
 
@@ -140,23 +140,23 @@ Endpoint: http://127.9.63.21:5014/cita/order
 ```
 Obtener todos los médicos de una especialidad específica (por ejemplo, **'Cardiología'**)
 ```
-Endpoint: http://127.9.63.21:5014/medico/especialidad
+Endpoint: http://127.9.63.21:5014/medico/especialidad/"nombreespecialidad"
 ```
 Encontrar la próxima cita para un paciente específico (por ejemplo, el paciente con **usu_id 1**)
 ```
-Endpoint: http://127.9.63.21:5014/cita/prox
+Endpoint: http://127.9.63.21:5014/cita/prox/"id del usuario"
 ```
 Encontrar todos los pacientes que tienen citas con un médico específico (por ejemplo, el médico con **med_nroMatriculaProsional 1**)
 ```
-Endpoint: http://127.9.63.21:5014/usuario/medico
+Endpoint: http://127.9.63.21:5014/cita/medico/cit_medico
 ```
 Obtener las consultorías para un paciente específico (por ejemplo, paciente **con usu_id 1**)
 ```
-Endpoint: http://127.9.63.21:5014/consultorio/proxyConsultorio
+Endpoint: http://127.9.63.21:5014/consultorio/paciente/cit_datosUsuario
 ```
 Encontrar todas las citas para un día específico (por ejemplo, **'2023-07-12'**)
 ```
-Endpoint: http://127.9.63.21:5014/cita/date
+Endpoint: http://127.9.63.21:5014/cita/date/"fecha buscada"
 ```
 Obtener los médicos y sus consultorios
 ```
@@ -164,14 +164,14 @@ Endpoint: http://127.9.63.21:5014/medico/consultorio
 ```
 Contar el número de citas que un médico tiene en un día específico (por ejemplo, el médico con **med_nroMatriculaProsional 1 en '2023-07-12'**)
 ```
-Endpoint: http://127.9.63.21:5014/cita/numdate
+Endpoint: http://127.9.63.21:5014/cita/numdate/"fecha"
 ```
 Obtener los consultorio donde se aplicó las citas de un paciente
 ```
-Endpoint: http://127.9.63.21:5014/cita/consultoriopaciente
+Endpoint: http://127.9.63.21:5014/cita/consultoriopaciente/"cit_datosUsuario"
 ```
 Obtener todas las citas realizadas por los pacientes de un genero si su estado de la cita fue atendidad
 ```
-Endpoint: http://127.9.63.21:5014/cita/generoatendido
+Endpoint: http://127.9.63.21:5014/cita/generoatendido/genero(1 masculino, 2 femenino)
 ```
 

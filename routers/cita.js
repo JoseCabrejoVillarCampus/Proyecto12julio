@@ -1,4 +1,4 @@
-import mysql from 'mysql2';
+import mysql, { raw } from 'mysql2';
 import {Router} from 'express';
 import proxyCita from '../middleware/middlewarecita.js';
 const storageCita = Router();
@@ -11,7 +11,7 @@ storageCita.use((req, res, next) => {
     next();
 })
 
-storageCita.get("/:id?", proxyCita, (req, res) => {
+storageCita.get("/:id?/:data?", proxyCita, (req, res) => {
     if (req.params.id === "order") {
         con.query(
             `SELECT * FROM cita ORDER BY cit_fecha ASC`,
@@ -29,11 +29,12 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
             `SELECT cita.*
             FROM cita
             INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
-            WHERE usuario.usu_id = 1
+            WHERE usuario.usu_id = ?
                 AND cita.cit_fecha >= CURDATE()
             ORDER BY cita.cit_fecha ASC
             LIMIT 1
             `,
+            [req.params.data],
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener la cita:', err.message);
@@ -47,8 +48,10 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
         con.query(
             `SELECT cita.*
             FROM cita
-            WHERE cita.cit_fecha = '2023-07-12'
+            WHERE cita.cit_fecha = ?
             `,
+            [req.params.data]
+            ,
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener la cita:', err.message);
@@ -63,8 +66,10 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
             `SELECT COUNT(*) AS total_citas
             FROM cita
             WHERE cit_medico = 123456
-            AND cit_fecha = '2023-07-12'
+            AND cit_fecha = ?
             `,
+            [req.params.id]
+            ,
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener la cita:', err.message);
@@ -74,14 +79,15 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
-    }  else if (req.params.id === "consultoriopaciente") {
+    } else if (req.params.id === "consultoriopaciente") {
         con.query(
             `SELECT DISTINCT c.cons_nombre
             FROM cita ci
             JOIN medico m ON ci.cit_medico = m.med_nroMatriculaProsional
             JOIN consultorio c ON m.med_consultorio = c.cons_codigo
-            WHERE ci.cit_datosUsuario = 1
+            WHERE ci.cit_datosUsuario = ?
             `,
+            [req.params.data],
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener la cita:', err.message);
@@ -97,9 +103,11 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
             FROM cita ci
             JOIN usuario u ON ci.cit_datosUsuario = u.usu_id
             JOIN estado_cita ec ON ci.cit_estadoCita = ec.estcita_id
-            WHERE u.usu_genero = "Masculino"
+            WHERE u.usu_genero = ?
             AND ec.estcita_nombre = "Confirmada"
             `,
+            [req.params.data]
+            ,
             (err, data, fil) => {
                 if (err) {
                     console.error('Error al obtener la cita:', err.message);
@@ -109,7 +117,27 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         ) 
-    } else {
+    } else if (req.params.id === "medico") {
+        con.query(
+            `SELECT cita.* ,
+            usuario.usu_nombre nombre_usuario,
+            medico.med_nombreCompleto nombre_medico
+            FROM cita
+            INNER JOIN usuario ON cita.cit_datosUsuario = usuario.usu_id
+            INNER JOIN medico ON cita.cit_medico = medico.med_nroMatriculaProsional
+            WHERE cita.cit_medico = ?
+            `,
+            [req.params.data],
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        ) 
+    }else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
             [`SELECT * FROM cita`];
