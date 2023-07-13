@@ -54,10 +54,53 @@ storageUsuario.get("/:id?", proxyUsuario, (req, res) => {
 });
 
 storageUsuario.post("/", proxyUsuario, (req, res) => {
+    const paciente = req.body;
+    if (paciente.usu_edad < 18) {
+        // Validar si ya existe el acudiente en la base de datos
+        con.query(
+            `SELECT * FROM acudiente WHERE acu_nombreCompleto = ?`,
+            [paciente.usu_acudiente],
+            (err, data) => {
+                if (err) {
+                    console.error('Error al buscar el acudiente:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    if (data.length > 0) {
+                        // El acudiente ya está registrado, asignar su código al paciente
+                        const acudienteId = data[0].acu_codigo;
+                        paciente.usu_acudiente = acudienteId;
+                        insertarPaciente(paciente, res);
+                    } else {
+                        // El acudiente no está registrado, insertarlo primero
+                        con.query(
+                            `INSERT INTO acudiente (acu_nombreCompleto) VALUES (?)`,
+                            [paciente.usu_acudiente],
+                            (err, result) => {
+                                if (err) {
+                                    console.error('Error al crear el acudiente:', err.message);
+                                    res.sendStatus(500);
+                                } else {
+                                    // Obtener el código del acudiente insertado
+                                    const acudienteId = result.insertId;
+                                    paciente.usu_acudiente = acudienteId;
+                                    insertarPaciente(paciente, res);
+                                }
+                            }
+                        );
+                    }                    
+                }
+            }
+        );
+    } else {
+        // El paciente es mayor de edad, insertarlo directamente
+        insertarPaciente(paciente, res);
+    }
+});
+
+function insertarPaciente(paciente, res) {
     con.query(
-        /*sql*/
         `INSERT INTO usuario SET ?`,
-        req.body,
+        paciente,
         (err, result) => {
             if (err) {
                 console.error('Error al crear usuario:', err.message);
@@ -67,7 +110,9 @@ storageUsuario.post("/", proxyUsuario, (req, res) => {
             }
         }
     );
-});
+}
+
+
 
 
 storageUsuario.put("/:id", proxyUsuario, (req, res) => {
