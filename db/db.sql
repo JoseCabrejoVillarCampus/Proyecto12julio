@@ -198,5 +198,5 @@ SELECT ci.cit_codigo, u.usu_nombre, u.usu_genero, ec.estcita_nombre
 FROM cita ci
 JOIN usuario u ON ci.cit_datosUsuario = u.usu_id
 JOIN estado_cita ec ON ci.cit_estadoCita = ec.estcita_id
-WHERE u.usu_genero = 'Masculino' -- Reemplaza 'Masculino' por el género deseado
-AND ec.estcita_nombre = 'Atendida'; -- Reemplaza 'Atendida' por el estado de la cita deseado
+WHERE u.usu_genero = "Masculino"
+AND ec.estcita_nombre = "Confirmada"; 

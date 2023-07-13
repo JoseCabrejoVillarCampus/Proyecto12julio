@@ -74,7 +74,7 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
-    } else if (req.params.id === "consultoriopaciente") {
+    }  else if (req.params.id === "consultoriopaciente") {
         con.query(
             `SELECT DISTINCT c.cons_nombre
             FROM cita ci
@@ -91,7 +91,25 @@ storageCita.get("/:id?", proxyCita, (req, res) => {
                 }
             }
         );
-    }else {
+    } else if (req.params.id === "generoatendido") {
+        con.query(
+            `SELECT ci.cit_codigo, u.usu_nombre, u.usu_genero, ec.estcita_nombre
+            FROM cita ci
+            JOIN usuario u ON ci.cit_datosUsuario = u.usu_id
+            JOIN estado_cita ec ON ci.cit_estadoCita = ec.estcita_id
+            WHERE u.usu_genero = "Masculino"
+            AND ec.estcita_nombre = "Confirmada"
+            `,
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener la cita:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        ) 
+    } else {
         let sql = (req.params.id) ?
             [`SELECT * FROM cita WHERE cit_codigo = ?`, req.params.id] :
             [`SELECT * FROM cita`];
