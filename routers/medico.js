@@ -30,7 +30,23 @@ storageMedico.get("/:id?", proxyMedico, (req, res) => {
                 }
             }
         );
-    } else {
+    } else if(req.params.id === "consultorio") {
+        con.query(
+            `SELECT medico.med_nroMatriculaProsional, medico.med_nombreCompleto, consultorio.cons_nombre
+            FROM medico
+            INNER JOIN consultorio ON medico.med_consultorio = consultorio.cons_codigo
+            `,
+            [req.params.id],
+            (err, data, fil) => {
+                if (err) {
+                    console.error('Error al obtener los medicos:', err.message);
+                    res.sendStatus(500);
+                } else {
+                    res.json(data);
+                }
+            }
+        );
+    }else {
         let sql = (req.params.id) ?
             [`SELECT * FROM medico WHERE med_nroMatriculaProsional = ?`, req.params.id] :
             [`SELECT * FROM medico`];
