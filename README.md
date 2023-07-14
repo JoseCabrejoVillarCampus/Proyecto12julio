@@ -178,3 +178,9 @@ Mostrar todas las citas que fueron rechazadas y en un mes específico, mostrar l
 ```
 http://127.9.63.21:5014/cita/rechazadas/"fecha"
 ```
+
+### USO DE con.escape()
+
+La expresión ${con.escape(data)} es un ejemplo de interpolación de cadena (string interpolation) en JavaScript. En este caso, se utiliza para construir una cadena de consulta SQL segura, escapando el valor de la variable data para evitar ataques de inyección de SQL.
+
+La función con.escape() es proporcionada por la biblioteca mysql2 y se utiliza para escapar los valores antes de insertarlos en una consulta SQL. Escapar significa convertir los caracteres especiales y agregar comillas u otros caracteres necesarios para que el valor se interprete correctamente en la consulta SQL.

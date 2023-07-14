@@ -12,34 +12,30 @@ storageConsultorio.use((req, res, next) => {
 })
 
 storageConsultorio.get("/:id?/:data?", proxyConsultorio, (req, res) => {
-    if (req.params.id === "paciente") {
-        con.query(
-            `SELECT consultorio.*
+    const { id, data } = req.params;
+    let sql = '';
+    
+    switch(id) {
+        case "paciente":
+            sql = `SELECT consultorio.*
             FROM consultorio
             INNER JOIN medico ON consultorio.cons_codigo = medico.med_consultorio
             INNER JOIN cita ON medico.med_nroMatriculaProsional = cita.cit_medico
-            WHERE cita.cit_datosUsuario = ?`,
-            [req.params.data],
-            (err, data, fil) => {
-                if (err) {
-                    console.error('Error al obtener los medicos:', err.message);
-                    res.sendStatus(500);
-                } else {
-                    res.json(data);
-                }
-            }
-        );
-    } else {
-        let sql = (req.params.id) ?
-            [`SELECT * FROM consultorio WHERE cons_codigo = ?`, req.params.id] :
-            [`SELECT * FROM consultorio`];
-        con.query(...sql,
-            (err, data, fie) => {
-                res.send(data);
-            }
-        );
+            WHERE cita.cit_datosUsuario = ${con.escape(data)}`;
+        break;
+        default: 
+            sql = id ? `SELECT * FROM consultorio WHERE cons_codigo = ${con.escape(id)}`:`SELECT * FROM consultorio`;
+        break;
     }
-});
+    con.query(sql, (err, data, fields) => {
+        if (err) {
+        console.error('Error al obtener la cita:', err.message);
+        res.sendStatus(500);
+        } else {
+        res.json(data);
+        }
+    });
+    });
 
 storageConsultorio.post("/", proxyConsultorio ,(req, res) => {
     con.query(
