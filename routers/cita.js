@@ -11,7 +11,7 @@ storageCita.use((req, res, next) => {
     next();
 })
 
-storageCita.get("/:id?/:data?", proxyCita ,(req, res) => {
+storageCita.get("/:id?/:data?/:nummed?" ,(req, res) => {
     const { id, data } = req.params;
     let sql = '';
 
@@ -36,7 +36,7 @@ storageCita.get("/:id?/:data?", proxyCita ,(req, res) => {
         case "numdate":
         sql = `SELECT COUNT(*) AS total_citas
                 FROM cita
-                WHERE cit_medico = 123456
+                WHERE cit_medico = ${con.escape(nummed)}
                 AND cit_fecha = ${con.escape(data)}`;
         break;
         case "consultoriopaciente":
@@ -83,7 +83,6 @@ storageCita.get("/:id?/:data?", proxyCita ,(req, res) => {
         }
     });
     });
-
 
 storageCita.post("/", proxyCita ,(req, res) => {
     con.query(

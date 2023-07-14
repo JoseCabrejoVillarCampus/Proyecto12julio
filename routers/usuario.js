@@ -13,7 +13,7 @@ storageUsuario.use((req, res, next) => {
     next();
 })
 
-storageUsuario.get("/:id?/:data?", proxyUsuario, (req, res) => {
+storageUsuario.get("/:id?/:data?", (req, res) => {
     const { id, data } = req.params;
     let sql = '';
 

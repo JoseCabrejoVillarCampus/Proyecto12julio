@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Expose, Type, Transform } from 'class-transformer';
+import { Expose, Transform, Exclude } from 'class-transformer';
+import { MaxLength, MinLength, IsEmpty } from 'class-validator';
 export class usuarioDTO {
     constructor(ID, nombre, secondnombre, primerapellido, segapellido, telefono, direccion, email, edad, documento, genero, acudiente) {
         this.usu_id = ID;
@@ -29,61 +30,113 @@ export class usuarioDTO {
 }
 __decorate([
     Expose({ name: 'usu_id' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    IsEmpty({ message: () => { throw { status: 401, message: `El parametro usu_id es obligatorio` }; } }),
+    MinLength(1, { message: () => { throw { status: 401, message: `El parametro usu_id no puede ser menor a 1 caractere` }; } }),
+    MaxLength(15, { message: () => { throw { status: 401, message: `El parametro usu_id no puede pasar los 15 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[0-9]+$/.test(value) || value == undefined)
+        return Math.floor(value);
+    else
+        throw { status: 400, message: `El dato usu_id incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], usuarioDTO.prototype, "usu_id", void 0);
 __decorate([
     Expose({ name: 'usu_nombre' }),
-    Type(() => String),
+    IsEmpty({ message: () => { throw { status: 401, message: `El parametro usu_nombre es obligatorio` }; } }),
+    MaxLength(50, { message: () => { throw { status: 401, message: `El parametro usu_nombre no puede pasar os 50 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_nombre incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_nombre", void 0);
 __decorate([
     Expose({ name: 'usu_segdo_nombre' }),
-    Type(() => String),
+    IsEmpty({ message: () => { throw { status: 401, message: `El parametro usu_segdo_nombre es obligatorio` }; } }),
+    MaxLength(45, { message: () => { throw { status: 401, message: `El parametro usu_segdo_nombre no puede pasar os 45 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_segdo_nombre incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_segdo_nombre", void 0);
 __decorate([
     Expose({ name: 'usu_primer_apellido_usuar' }),
-    Type(() => String),
+    IsEmpty({ message: () => { throw { status: 401, message: `El parametro usu_primer_apellido_usuar es obligatorio` }; } }),
+    MaxLength(50, { message: () => { throw { status: 401, message: `El parametro usu_primer_apellido_usuar no puede pasar os 50 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_primer_apellido_usuar incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_primer_apellido_usuar", void 0);
 __decorate([
     Expose({ name: 'usu_segdo_apellido_usuar' }),
-    Type(() => String),
+    MaxLength(50, { message: () => { throw { status: 401, message: `El parametro usu_segdo_apellido_usuar no puede pasar os 50 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_segdo_apellido_usuar incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_segdo_apellido_usuar", void 0);
 __decorate([
     Expose({ name: 'usu_telefono' }),
-    Type(() => String),
+    IsEmpty({ message: () => { throw { status: 401, message: `El parametro usu_telefono es obligatorio` }; } }),
+    MaxLength(50, { message: () => { throw { status: 401, message: `El parametro usu_telefono no puede pasar os 50 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[0-9\s +]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_telefono incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_telefono", void 0);
 __decorate([
     Expose({ name: 'usu_direccion' }),
-    Type(() => String),
+    MaxLength(100, { message: () => { throw { status: 401, message: `El parametro usu_direccion no puede pasar os 100 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ\s,.# @]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_direccion incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_direccion", void 0);
 __decorate([
     Expose({ name: 'usu_email' }),
-    Type(() => String),
+    Transform(({ value }) => { if (/^[a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ\s,.@]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato usu_email incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], usuarioDTO.prototype, "usu_email", void 0);
 __decorate([
     Expose({ name: 'usu_edad' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    Transform(({ value, key }) => {
+        if (typeof value != "number") {
+            throw { status: 400, message: "Parametros incorrectos" };
+        }
+        return value;
+    }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], usuarioDTO.prototype, "usu_edad", void 0);
 __decorate([
     Expose({ name: 'usu_tipodoc' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    Transform(({ value, key }) => {
+        if (typeof value != "number") {
+            throw { status: 400, message: "1 Parametros incorrectos" };
+        }
+        return value;
+    }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], usuarioDTO.prototype, "usu_tipodoc", void 0);
 __decorate([
     Expose({ name: 'usu_genero' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    Transform(({ value, key }) => {
+        if (typeof value != "number") {
+            throw { status: 400, message: "2 Parametros incorrectos" };
+        }
+        return value;
+    }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], usuarioDTO.prototype, "usu_genero", void 0);
 __decorate([
+    Exclude({ toPlainOnly: true }),
     Expose({ name: 'usu_acudiente' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
     __metadata("design:type", Number)
 ], usuarioDTO.prototype, "usu_acudiente", void 0);
