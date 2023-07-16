@@ -40,8 +40,4 @@ export class acudienteDTO {
         this.acu_telefono = telefono;
         this.acu_direccion = direccion;
     }
-
-    get nombreId(): string {
-        return `${this.acu_codigo} - ${this.acu_telefono}`;
-    }
 }

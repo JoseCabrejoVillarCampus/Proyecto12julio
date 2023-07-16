@@ -1,7 +1,6 @@
 import { Expose, Type, Transform, Exclude } from 'class-transformer';
 import {isInt, IsDefined, MaxLength, MinLength, IsEmpty,IsString, IsInt, Matches, IsNumber } from 'class-validator';
 
-
 export class usuarioDTO {
 
     @Expose({ name: 'usu_id' })
@@ -9,8 +8,6 @@ export class usuarioDTO {
     @IsDefined({message: ()=>{throw {status: 401, message: `El parametro usu_id es obligatorio` }}})
     @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato usu_id incumple los parametros acordados`};},{ toClassOnly: true})
     usu_id: number;
-
-    
 
     @Expose({ name: 'usu_nombre' })
     @IsString()
@@ -104,9 +101,5 @@ export class usuarioDTO {
         this.usu_tipodoc = documento;
         this.usu_genero = genero;
         this.usu_acudiente = acudiente;
-    }
-
-    get nombreId(): string {
-        return `${this.usu_id} - ${this.usu_nombre}`;
     }
 }

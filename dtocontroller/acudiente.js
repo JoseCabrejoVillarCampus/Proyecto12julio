@@ -16,9 +16,6 @@ export class acudienteDTO {
         this.acu_telefono = telefono;
         this.acu_direccion = direccion;
     }
-    get nombreId() {
-        return `${this.acu_codigo} - ${this.acu_telefono}`;
-    }
 }
 __decorate([
     Expose({ name: 'acu_codigo' }),

@@ -14,5 +14,6 @@ proxyAcudiente.use(async(req,res,next)=>{
     } catch (err) {
         res.status(err.status).send(err);
     }
-})
+});
+
 export default proxyAcudiente;

@@ -1,6 +1,7 @@
 import mysql from 'mysql2';
 import {Router} from 'express';
 import proxyAcudiente from '../middleware/middlewareacudiente.js';
+/* import validateConsulta from '../middleware/middlewarevalidacion.js'; */
 const storageAcudiente = Router();
 let con = undefined;
 
@@ -11,7 +12,7 @@ storageAcudiente.use((req, res, next) => {
     next();
 })
 
-storageAcudiente.get("/:id?", (req,res)=>{
+storageAcudiente.get("/:id?",(req,res)=>{
     let sql = (req.params.id)
         ? [`SELECT * FROM acudiente WHERE acu_codigo = ?`, req.params.id]
         : [`SELECT * FROM acudiente`];

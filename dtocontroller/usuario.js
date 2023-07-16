@@ -24,9 +24,6 @@ export class usuarioDTO {
         this.usu_genero = genero;
         this.usu_acudiente = acudiente;
     }
-    get nombreId() {
-        return `${this.usu_id} - ${this.usu_nombre}`;
-    }
 }
 __decorate([
     Expose({ name: 'usu_id' }),
