@@ -11,7 +11,7 @@ storageTipoDocumento.use((req, res, next) => {
     next();
 })
 
-storageTipoDocumento.get("/:id?", proxyTipoDocumento , (req,res)=>{
+storageTipoDocumento.get("/:id?", (req,res)=>{
     let sql = (req.params.id)
         ? [`SELECT * FROM tipo_documento WHERE tipdoc_id = ?`, req.params.id]
         : [`SELECT * FROM tipo_documento`];
@@ -54,11 +54,11 @@ storageTipoDocumento.put("/:id", proxyTipoDocumento ,(req, res) => {
         }
     );
 });
-storageTipoDocumento.delete("/:id", proxyTipoDocumento ,(req, res) => {
+storageTipoDocumento.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM tipo_documento WHERE tipdoc_id = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar tipo documento:', err.message);

@@ -1,17 +1,25 @@
 import { Expose, Type, Transform } from 'class-transformer';
+import {isInt, IsDefined, MaxLength, MinLength, IsEmpty,IsString, IsInt, Matches, IsNumber } from 'class-validator';
 
 export class tipo_documentoDTO {
 
     @Expose({ name: 'tipdoc_id' })
-    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    @IsNumber()
+    @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato tipdoc_id incumple los parametros acordados`};},{ toClassOnly: true})
     tipdoc_id: number;
 
     @Expose({ name: 'tipdoc_nombre' })
-    @Type(() => String)
+    @IsString()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro tipdoc_nombre es obligatorio` }}})
+    @MaxLength(50, {message: ()=>{throw {status: 401, message: `El parametro tipdoc_nombre no puede pasar os 50 caracteres`}}})
+    @Transform(({value})=>{if(/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value)) return value; else throw {status: 400, message:`El dato tipdoc_nombre incumple los parametros acordados`};},{ toClassOnly: true})
     tipdoc_nombre: string;
 
     @Expose({ name: 'tipdoc_abreviatura' })
-    @Type(() => String)
+    @IsString()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro tipdoc_abreviatura es obligatorio` }}})
+    @MaxLength(50, {message: ()=>{throw {status: 401, message: `El parametro tipdoc_abreviatura no puede pasar os 50 caracteres`}}})
+    @Transform(({value})=>{if(/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value)) return value; else throw {status: 400, message:`El dato tipdoc_abreviatura incumple los parametros acordados`};},{ toClassOnly: true})
     tipdoc_abreviatura: string;
 
 

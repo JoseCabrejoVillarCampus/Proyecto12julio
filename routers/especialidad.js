@@ -11,7 +11,7 @@ storageEspecialidad.use((req, res, next) => {
     next();
 })
 
-storageEspecialidad.get("/:id?", proxyEspecialidad , (req,res)=>{
+storageEspecialidad.get("/:id?", (req,res)=>{
     let sql = (req.params.id)
         ? [`SELECT * FROM especialidad WHERE esp_id = ?`, req.params.id]
         : [`SELECT * FROM especialidad`];
@@ -54,11 +54,11 @@ storageEspecialidad.put("/:id", proxyEspecialidad ,(req, res) => {
         }
     );
 });
-storageEspecialidad.delete("/:id", proxyEspecialidad ,(req, res) => {
+storageEspecialidad.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM especialidad WHERE esp_id = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar especialidad:', err.message);

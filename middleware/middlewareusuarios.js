@@ -9,7 +9,7 @@ proxyUsuario.use( async (req,res,next)=>{
     try {
         let data = plainToClass(usuarioDTO, req.body, { excludeExtraneousValues: true});
         await validate(data);
-        /* req.body = JSON.parse(JSON.stringify(data)); */
+        req.body = JSON.parse(JSON.stringify(data));
         next();
     } catch (err) {
         res.status(err.status).send(err);

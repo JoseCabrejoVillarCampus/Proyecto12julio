@@ -11,7 +11,7 @@ storageConsultorio.use((req, res, next) => {
     next();
 })
 
-storageConsultorio.get("/:id?/:data?", proxyConsultorio, (req, res) => {
+storageConsultorio.get("/:id?/:data?", (req, res) => {
     const { id, data } = req.params;
     let sql = '';
     
@@ -54,7 +54,7 @@ storageConsultorio.post("/", proxyConsultorio ,(req, res) => {
 });
 
 
-storageConsultorio.put("/:id", proxyConsultorio ,(req, res) => {
+storageConsultorio.put("/:id",(req, res) => {
     con.query(
         /*sql*/
         `UPDATE consultorio SET ?  WHERE cons_codigo = ?`,
@@ -69,11 +69,11 @@ storageConsultorio.put("/:id", proxyConsultorio ,(req, res) => {
         }
     );
 });
-storageConsultorio.delete("/:id", proxyConsultorio ,(req, res) => {
+storageConsultorio.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM consultorio WHERE cons_codigo = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar consultorio:', err.message);

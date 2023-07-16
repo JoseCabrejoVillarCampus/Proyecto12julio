@@ -11,7 +11,7 @@ storageAcudiente.use((req, res, next) => {
     next();
 })
 
-storageAcudiente.get("/:id?", proxyAcudiente , (req,res)=>{
+storageAcudiente.get("/:id?", (req,res)=>{
     let sql = (req.params.id)
         ? [`SELECT * FROM acudiente WHERE acu_codigo = ?`, req.params.id]
         : [`SELECT * FROM acudiente`];
@@ -54,11 +54,11 @@ storageAcudiente.put("/:id", proxyAcudiente ,(req, res) => {
         }
     );
 });
-storageAcudiente.delete("/:id", proxyAcudiente ,(req, res) => {
+storageAcudiente.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM acudiente WHERE acu_codigo = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar acudiente:', err.message);

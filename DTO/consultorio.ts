@@ -1,13 +1,18 @@
 import { Expose, Type, Transform } from 'class-transformer';
+import { IsNumber, IsDefined, IsString, MaxLength} from 'class-validator';
 
 export class consultorioDTO {
 
     @Expose({ name: 'cons_codigo' })
-    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    @IsNumber()
+    @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato cons_codigo incumple los parametros acordados`};},{ toClassOnly: true})
     cons_codigo: number;
 
     @Expose({ name: 'cons_nombre' })
-    @Type(() => String)
+    @IsString()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro cons_nombre es obligatorio` }}})
+    @MaxLength(50, {message: ()=>{throw {status: 401, message: `El parametro cons_nombre no puede pasar os 50 caracteres`}}})
+    @Transform(({value})=>{if(/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value)) return value; else throw {status: 400, message:`El dato cons_nombre incumple los parametros acordados`};},{ toClassOnly: true})
     cons_nombre: string;
 
 

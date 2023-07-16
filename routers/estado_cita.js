@@ -11,7 +11,7 @@ storageEstadoCita.use((req, res, next) => {
     next();
 })
 
-storageEstadoCita.get("/:id?", proxyEstadoCita , (req,res)=>{
+storageEstadoCita.get("/:id?", (req,res)=>{
     let sql = (req.params.id)
         ? [`SELECT * FROM estado_cita WHERE estcita_id = ?`, req.params.id]
         : [`SELECT * FROM estado_cita`];
@@ -54,11 +54,11 @@ storageEstadoCita.put("/:id", proxyEstadoCita ,(req, res) => {
         }
     );
 });
-storageEstadoCita.delete("/:id", proxyEstadoCita ,(req, res) => {
+storageEstadoCita.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM estado_cita WHERE estcita_id = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar la cita:', err.message);

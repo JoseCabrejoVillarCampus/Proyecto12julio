@@ -11,7 +11,7 @@ storageMedico.use((req, res, next) => {
     next();
 })
 
-storageMedico.get("/:id?/:data?", proxyMedico, (req, res) => {
+storageMedico.get("/:id?/:data?", (req, res) => {
     const { id, data } = req.params;
     let sql = '';
 
@@ -31,7 +31,7 @@ storageMedico.get("/:id?/:data?", proxyMedico, (req, res) => {
             `;
         break;
         default:
-            sql = id ? `SELECT * FROM medico WHERE med_nroMatriculaProsional = ${con.escape(data)}` :
+            sql = id ? `SELECT * FROM medico WHERE med_nroMatriculaProsional = ${con.escape(req.params.id)}` :
             `SELECT * FROM medico`;
         break;
     }
@@ -77,11 +77,11 @@ storageMedico.put("/:id", proxyMedico ,(req, res) => {
         }
     );
 });
-storageMedico.delete("/:id", proxyMedico ,(req, res) => {
+storageMedico.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM medico WHERE med_nroMatriculaProsional = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar medico:', err.message);

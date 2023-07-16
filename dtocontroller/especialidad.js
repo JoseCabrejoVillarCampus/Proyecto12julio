@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Expose, Type, Transform } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
+import { IsDefined, MaxLength, IsString, IsNumber } from 'class-validator';
 export class especialidadDTO {
     constructor(ID, nom_user) {
         this.esp_id = ID;
@@ -19,11 +20,21 @@ export class especialidadDTO {
 }
 __decorate([
     Expose({ name: 'esp_id' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    IsNumber(),
+    Transform(({ value }) => { if (/^[0-9]+$/.test(value) || value == undefined)
+        return Math.floor(value);
+    else
+        throw { status: 400, message: `El dato esp_id incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], especialidadDTO.prototype, "esp_id", void 0);
 __decorate([
     Expose({ name: 'esp_nombre' }),
-    Type(() => String),
+    IsString(),
+    IsDefined({ message: () => { throw { status: 401, message: `El parametro esp_nombre es obligatorio` }; } }),
+    MaxLength(50, { message: () => { throw { status: 401, message: `El parametro esp_nombre no puede pasar os 50 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato esp_nombre incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], especialidadDTO.prototype, "esp_nombre", void 0);

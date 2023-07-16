@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Expose, Type, Transform } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
+import { IsDefined, MaxLength, IsString, IsNumber } from 'class-validator';
 export class medicoDTO {
     constructor(ID, nom_gen, medico, espec) {
         this.med_nroMatriculaProsional = ID;
@@ -21,21 +22,42 @@ export class medicoDTO {
 }
 __decorate([
     Expose({ name: 'med_nroMatriculaProsional' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    IsNumber(),
+    IsDefined({ message: () => { throw { status: 401, message: `El parametro med_nroMatriculaProsional es obligatorio` }; } }),
+    Transform(({ value }) => { if (/^[0-9]+$/.test(value) || value == undefined)
+        return Math.floor(value);
+    else
+        throw { status: 400, message: `El dato med_nroMatriculaProsional incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], medicoDTO.prototype, "med_nroMatriculaProsional", void 0);
 __decorate([
     Expose({ name: 'med_nombreCompleto' }),
-    Type(() => String),
+    IsString(),
+    IsDefined({ message: () => { throw { status: 401, message: `El parametro med_nombreCompleto es obligatorio` }; } }),
+    MaxLength(50, { message: () => { throw { status: 401, message: `El parametro med_nombreCompleto no puede pasar os 50 caracteres` }; } }),
+    Transform(({ value }) => { if (/^[a-z A-Z áéíóúÁÉÍÓÚñÑüÜ\.]+$/.test(value))
+        return value;
+    else
+        throw { status: 400, message: `El dato med_nombreCompleto incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", String)
 ], medicoDTO.prototype, "med_nombreCompleto", void 0);
 __decorate([
     Expose({ name: 'med_consultorio' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    IsNumber(),
+    IsDefined({ message: () => { throw { status: 401, message: `El parametro med_consultorio es obligatorio` }; } }),
+    Transform(({ value }) => { if (/^[0-9]+$/.test(value) || value == undefined)
+        return Math.floor(value);
+    else
+        throw { status: 400, message: `El dato med_consultorio incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], medicoDTO.prototype, "med_consultorio", void 0);
 __decorate([
     Expose({ name: 'med_especialidad' }),
-    Transform(({ value, key }) => parseInt(value), { toClassOnly: true }),
+    IsNumber(),
+    IsDefined({ message: () => { throw { status: 401, message: `El parametro med_especialidad es obligatorio` }; } }),
+    Transform(({ value }) => { if (/^[0-9]+$/.test(value) || value == undefined)
+        return Math.floor(value);
+    else
+        throw { status: 400, message: `El dato med_especialidad incumple los parametros acordados` }; }, { toClassOnly: true }),
     __metadata("design:type", Number)
 ], medicoDTO.prototype, "med_especialidad", void 0);

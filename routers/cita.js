@@ -36,7 +36,7 @@ storageCita.get("/:id?/:data?/:nummed?" ,(req, res) => {
         case "numdate":
         sql = `SELECT COUNT(*) AS total_citas
                 FROM cita
-                WHERE cit_medico = ${con.escape(nummed)}
+                WHERE cit_medico = ${con.escape(req.params.nummed)}
                 AND cit_fecha = ${con.escape(data)}`;
         break;
         case "consultoriopaciente":

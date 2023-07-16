@@ -1,25 +1,35 @@
 import { Expose, Type, Transform } from 'class-transformer';
+import {isInt, IsDefined, MaxLength, MinLength, IsEmpty,IsString, IsInt, Matches, IsNumber, IsDate } from 'class-validator';
 
 export class citaDTO {
 
     @Expose({ name: 'cit_codigo' })
-    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    @IsNumber()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro usu_id es obligatorio` }}})
+    @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato usu_id incumple los parametros acordados`};},{ toClassOnly: true})
     cit_codigo: number;
 
     @Expose({ name: 'cit_fecha' })
-    @Type(() => Date)
+    @IsDate()
+    @Transform(({value})=> {if(/^\d{4}-\d{2}-\d{2}$/.test(value) || value == undefined) return(value); else throw {status: 400, message:`el parámetro ingresado para fecha no es válido, debe seguir la sintaxis AAAA-MM-DD`};}, {toClassOnly:true})
     cit_fecha: Date;
 
     @Expose({ name: 'cit_estadoCita' })
-    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    @IsNumber()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro cit_estadoCita es obligatorio` }}})
+    @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato cit_estadoCita incumple los parametros acordados`};},{ toClassOnly: true})
     cit_estadoCita: number;
 
     @Expose({ name: 'cit_medico' })
-    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    @IsNumber()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro cit_medico es obligatorio` }}})
+    @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato cit_medico incumple los parametros acordados`};},{ toClassOnly: true})
     cit_medico: number;
 
     @Expose({ name: 'cit_datosUsuario' })
-    @Transform(({ value, key }) => parseInt(value), { toClassOnly: true })
+    @IsNumber()
+    @IsDefined({message: ()=>{throw {status: 401, message: `El parametro cit_datosUsuario es obligatorio` }}})
+    @Transform(({value})=>{if(/^[0-9]+$/.test(value) || value==undefined ) return Math.floor(value); else throw {status: 400, message:`El dato cit_datosUsuario incumple los parametros acordados`};},{ toClassOnly: true})
     cit_datosUsuario: number;
 
 

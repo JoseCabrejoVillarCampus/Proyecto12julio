@@ -11,7 +11,7 @@ storageGenero.use((req, res, next) => {
     next();
 })
 
-storageGenero.get("/:id?", proxyGenero , (req,res)=>{
+storageGenero.get("/:id?", (req,res)=>{
     let sql = (req.params.id)
         ? [`SELECT * FROM genero WHERE gen_id = ?`, req.params.id]
         : [`SELECT * FROM genero`];
@@ -54,11 +54,11 @@ storageGenero.put("/:id", proxyGenero ,(req, res) => {
         }
     );
 });
-storageGenero.delete("/:id", proxyGenero ,(req, res) => {
+storageGenero.delete("/:id",(req, res) => {
     con.query(
         /*sql*/
         `DELETE FROM genero WHERE gen_id = ?`,
-        [id],
+        [req.params.id],
         (err, result) => {
             if (err) {
                 console.error('Error al eliminar genero:', err.message);
